@@ -85,7 +85,6 @@ public class P implements Serializable {
             FragmentTransaction fragmentTransaction = manager.beginTransaction();
             fragmentTransaction.remove(pFragment)
                     .commitAllowingStateLoss();
-            manager.popBackStack();
             L.logE(manager.getFragments().toString());
         }
         if (dialog != null) {
