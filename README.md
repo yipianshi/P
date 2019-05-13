@@ -34,25 +34,25 @@ Step 2.在使用的module的build.gradle下添加:
                     public void onRequestPermissionResult(RequestPermissionResult result) {
                         switch (result.getState()) {
                             case RequestPermissionResult.ALL_PERMISSION_PASS:
-								//所有权限通过
+				//所有权限通过
                                 L.logE("ALL_PERMISSION_PASS "
                                         + "\n通过的权限 = " + Arrays.toString(result.getPassPermissions()));
                                 break;
                             case RequestPermissionResult.SOME_PERMISSION_PASS:
-								//部分权限通过
+				//部分权限通过
                                 L.logE("SOME_PERMISSION_PASS "
                                         + "\n拒绝的权限 = " + Arrays.toString(result.getDeniedPermissions())
                                         + "\n通过的权限 = " + Arrays.toString(result.getPassPermissions()));
                                 break;
                             case RequestPermissionResult.NO_PERMISSION_PASS:
-								//没有权限通过
+				//没有权限通过
                                 L.logE("NO_PERMISSION_PASS "
                                         + "\n拒绝的权限 = " + Arrays.toString(result.getDeniedPermissions()));
                                 break;
                         }
                     }
                 })
-				//执行权限申请
+		//执行权限申请
                 .show();
 
 
