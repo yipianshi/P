@@ -1,5 +1,25 @@
 # P
 Android 的动态权限申请框架<br/>
+[![](https://jitpack.io/v/yipianshi/p.svg)](https://jitpack.io/#yipianshi/p)
+	
+gralde:<br/>
+Step 1.在项目build.gradle添加:
+
+	allprojects {
+			repositories {
+				...
+				maven { url 'https://jitpack.io' }
+			}
+		}
+
+Step 2.在使用的module的build.gradle下添加:
+
+	dependencies {
+		   implementation 'com.github.yipianshi:p:release'
+		}
+
+
+
 完整的请求代码：
 	
 	//this需要是AppFragmentActivity 或者是Fragment
@@ -38,7 +58,7 @@ Android 的动态权限申请框架<br/>
 
 如果已经获取P的实例，也可以这样修改需要申请的权限
 	
- 	 p.replacePermissionsAndShow(new String[]{
+ 	 p1.replacePermissionsAndShow(new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO
 						});
