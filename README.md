@@ -24,11 +24,11 @@ Step 2.在使用的module的build.gradle下添加:
 	
 	//this需要是AppFragmentActivity 或者是Fragment
 	P p = new P.Builder(this)
-				//需要申请的权限
+		//需要申请的权限
                 .requestPermissions(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_PHONE_STATE})
-				//权限申请结果回调
+		//权限申请结果回调
                 .onRequestPermissionCallback(new P.OnRequestPermissionCallback() {
                     @Override
                     public void onRequestPermissionResult(RequestPermissionResult result) {
