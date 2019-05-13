@@ -38,7 +38,7 @@ Android 的动态权限申请框架<br/>
 
 如果已经获取P的实例，也可以这样修改需要申请的权限
 	
- 	 p1.replacePermissionsAndShow(new String[]{
+ 	 p.replacePermissionsAndShow(new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO
 						});
