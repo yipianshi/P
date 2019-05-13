@@ -81,7 +81,6 @@ public class P implements Serializable {
      */
     void removeFragment() {
         if (manager != null && pFragment != null) {
-            L.logE(manager.getFragments().toString());
             FragmentTransaction fragmentTransaction = manager.beginTransaction();
             fragmentTransaction.remove(pFragment)
                     .commitAllowingStateLoss();
@@ -118,7 +117,7 @@ public class P implements Serializable {
         executeRequestPermission(builder);
     }
 
-    public static class Builder {
+    public static class Builder implements Serializable{
         WeakReference<Object> weakReference;
         String[] requestPermissions;
         OnRequestPermissionCallback onRequestPermissionCallback;
