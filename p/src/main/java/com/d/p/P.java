@@ -33,14 +33,14 @@ public class P implements Serializable {
     private void executeRequestPermission(Builder builder) {
         Object object = builder.weakReference.get();
         if (object == null) {
-            L.logE("");
+            L.logE("builder.weakReference.get() == null");
             return;
         }
         if (manager == null) {
             manager = getFragmentManager(object);
         }
         if (manager == null) {
-            L.logE("");
+            L.logE("FragmentManager == null");
             return;
         }
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
