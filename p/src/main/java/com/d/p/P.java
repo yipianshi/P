@@ -81,7 +81,6 @@ public class P implements Serializable {
      */
     void removeFragment() {
         if (manager != null && pFragment != null) {
-            L.logE(manager.getFragments().toString());
             FragmentTransaction fragmentTransaction = manager.beginTransaction();
             fragmentTransaction.remove(pFragment)
                     .commitAllowingStateLoss();
