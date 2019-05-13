@@ -117,7 +117,7 @@ public class P implements Serializable {
         executeRequestPermission(builder);
     }
 
-    public static class Builder {
+    public static class Builder  implements Serializable {
         WeakReference<Object> weakReference;
         String[] requestPermissions;
         OnRequestPermissionCallback onRequestPermissionCallback;
