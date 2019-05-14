@@ -1,6 +1,7 @@
 package com.d.p;
 
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -24,6 +26,10 @@ public class PFragment extends Fragment {
     private final static String PARAMS1 = "params1";
     private final static String PARAMS2 = "params2";
     private final static int PERMISSION_REQUEST_CODE = 0xFF;
+
+    private ArrayList<String> preUnPassList = new ArrayList<>();
+    private ArrayList<String> prePassList = new ArrayList<>();
+    private String[] checkPermissions;
 
     private String[] permissions;
     private P p;
@@ -55,13 +61,47 @@ public class PFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        requestPermissions(permissions, PERMISSION_REQUEST_CODE);
+        divisivePermissions(permissions);
+       if (preUnPassList.size() == 0) {
+            //全部通过
+            RequestPermissionResult requestPermissionResult = new RequestPermissionResult(RequestPermissionResult.ALL_PERMISSION_PASS, new String[]{}, permissions);
+            p.onRequestPermissionResult(requestPermissionResult);
+            //不用再次请求权限
+            return null;
+        }
+        //请求未通过的权限
+        checkPermissions = new String[preUnPassList.size()];
+//        requestPermissions(checkPermissions, 0);
+        preUnPassList.toArray(checkPermissions);
+        requestPermissions(checkPermissions, PERMISSION_REQUEST_CODE);
         return null;
+    }
+
+    /**
+     * 请求权限前进行筛选，区分通过或没有通过的权限
+     *
+     * @param permissions
+     * @return
+     */
+    private void divisivePermissions(String[] permissions) {
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        for (String permission : permissions) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), permission)) {
+                //权限不通过
+                preUnPassList.add(permission);
+            } else {
+                prePassList.add(permission);
+            }
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
+//        if (requestCode == 0) {
             RequestPermissionResult requestPermissionResult = getRequestPermissionResult(permissions, grantResults);
             p.removeFragment();
             p.onRequestPermissionResult(requestPermissionResult);
@@ -88,11 +128,13 @@ public class PFragment extends Fragment {
                 passPermissionList.add(permissions[i]);
             }
         }
+
+        passPermissionList.addAll(prePassList);
+
         String[] deniedPermissions = new String[deniedPermissionList.size()];
-        String[] passPermissions = new String[permissions.length - deniedPermissionList.size()];
+        String[] passPermissions = new String[passPermissionList.size()];
         deniedPermissionList.toArray(deniedPermissions);
         passPermissionList.toArray(passPermissions);
-
         if (deniedPermissions.length == 0) {
             //所有权限通过
             state = RequestPermissionResult.ALL_PERMISSION_PASS;
@@ -106,6 +148,7 @@ public class PFragment extends Fragment {
                 state = RequestPermissionResult.NO_PERMISSION_PASS;
             }
         }
+
         return new RequestPermissionResult(state, deniedPermissions, passPermissions);
     }
 
