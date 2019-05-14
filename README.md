@@ -1,38 +1,58 @@
 # P
 Android 的动态权限申请框架<br/>
+[![](https://jitpack.io/v/yipianshi/p.svg)](https://jitpack.io/#yipianshi/p)
+	
+gralde:<br/>
+Step 1.在项目build.gradle添加:
+
+	allprojects {
+			repositories {
+				...
+				maven { url 'https://jitpack.io' }
+			}
+		}
+
+Step 2.在使用的module的build.gradle下添加:
+
+	dependencies {
+		   implementation 'com.github.yipianshi:p:release'
+		}
+
+
+
 完整的请求代码：
 	
 	//this需要是AppFragmentActivity 或者是Fragment
 	P p = new P.Builder(this)
-				//需要申请的权限
+		//需要申请的权限
                 .requestPermissions(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_PHONE_STATE})
-				//权限申请结果回调
+		//权限申请结果回调
                 .onRequestPermissionCallback(new P.OnRequestPermissionCallback() {
                     @Override
                     public void onRequestPermissionResult(RequestPermissionResult result) {
                         switch (result.getState()) {
                             case RequestPermissionResult.ALL_PERMISSION_PASS:
-								//所有权限通过
+				//所有权限通过
                                 L.logE("ALL_PERMISSION_PASS "
                                         + "\n通过的权限 = " + Arrays.toString(result.getPassPermissions()));
                                 break;
                             case RequestPermissionResult.SOME_PERMISSION_PASS:
-								//部分权限通过
+				//部分权限通过
                                 L.logE("SOME_PERMISSION_PASS "
                                         + "\n拒绝的权限 = " + Arrays.toString(result.getDeniedPermissions())
                                         + "\n通过的权限 = " + Arrays.toString(result.getPassPermissions()));
                                 break;
                             case RequestPermissionResult.NO_PERMISSION_PASS:
-								//没有权限通过
+				//没有权限通过
                                 L.logE("NO_PERMISSION_PASS "
                                         + "\n拒绝的权限 = " + Arrays.toString(result.getDeniedPermissions()));
                                 break;
                         }
                     }
                 })
-				//执行权限申请
+		//执行权限申请
                 .show();
 
 
