@@ -25,13 +25,13 @@ public class PFragment extends Fragment {
     private final static String PARAMS2 = "params2";
     private final static int PERMISSION_REQUEST_CODE = 0xFF;
 
-
     private String[] permissions;
     private P p;
 
     public static PFragment newInstance(P p, String[] permissions) {
         Bundle args = new Bundle();
-        args.putSerializable(PARAMS1, p);
+//        args.putSerializable(PARAMS1, p);
+        args.putParcelable(PARAMS1, p);
         args.putStringArray(PARAMS2, permissions);
         PFragment fragment = new PFragment();
         fragment.setArguments(args);
@@ -46,7 +46,8 @@ public class PFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            p = (P) args.getSerializable(PARAMS1);
+//            p = (P) args.getSerializable(PARAMS1);
+            p = (P) args.getParcelable(PARAMS1);
             permissions = args.getStringArray(PARAMS2);
         }
     }

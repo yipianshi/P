@@ -1,12 +1,13 @@
 package com.d.p;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.d.p.bean.AlertBean;
 import com.d.p.bean.RequestPermissionResult;
 import com.d.p.utils.L;
 
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,7 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
  * @author dcm
  * @since 2019/5/9
  */
-public class P implements Serializable {
+public class P implements Parcelable {
     private FragmentManager manager;
     private PFragment pFragment;
     private Builder builder;
@@ -117,7 +118,7 @@ public class P implements Serializable {
         executeRequestPermission(builder);
     }
 
-    public static class Builder implements Serializable{
+    public static class Builder implements Parcelable {
         WeakReference<Object> weakReference;
         String[] requestPermissions;
         OnRequestPermissionCallback onRequestPermissionCallback;
@@ -154,6 +155,30 @@ public class P implements Serializable {
         public P show() {
             return new P(this);
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+        }
+
+        protected Builder(Parcel in) {
+        }
+
+        public static final Creator<Builder> CREATOR = new Creator<Builder>() {
+            @Override
+            public Builder createFromParcel(Parcel source) {
+                return new Builder(source);
+            }
+
+            @Override
+            public Builder[] newArray(int size) {
+                return new Builder[size];
+            }
+        };
     }
 
     public interface OnRequestPermissionCallback {
@@ -165,4 +190,29 @@ public class P implements Serializable {
         void onRequestPermissionResult(RequestPermissionResult result);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.builder, flags);
+    }
+
+    protected P(Parcel in) {
+        this.builder = in.readParcelable(Builder.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<P> CREATOR = new Parcelable.Creator<P>() {
+        @Override
+        public P createFromParcel(Parcel source) {
+            return new P(source);
+        }
+
+        @Override
+        public P[] newArray(int size) {
+            return new P[size];
+        }
+    };
 }

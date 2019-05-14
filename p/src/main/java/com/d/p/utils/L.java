@@ -6,7 +6,7 @@ import android.util.Log;
  * 打印工具类
  */
 public class L {
-    private final static String TAG = "P";
+    private final static String TAG = "P-permission";
 
     public static void logE(String msg) {
         Log.e(TAG, msg);
