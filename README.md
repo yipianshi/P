@@ -22,7 +22,7 @@ Step 2.在使用的module的build.gradle下添加:
 
 完整的请求代码：
 	
-	//this需要是AppFragmentActivity 或者是Fragment
+	//this需要是FragmentActivity 或者是Fragment
 	P p = new P.Builder(this)
 		//需要申请的权限
                 .requestPermissions(new String[]{
