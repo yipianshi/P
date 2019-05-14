@@ -1,7 +1,7 @@
 package com.d.p;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,7 +62,7 @@ public class PFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         divisivePermissions(permissions);
-       if (preUnPassList.size() == 0) {
+        if (preUnPassList.size() == 0) {
             //全部通过
             RequestPermissionResult requestPermissionResult = new RequestPermissionResult(RequestPermissionResult.ALL_PERMISSION_PASS, new String[]{}, permissions);
             p.onRequestPermissionResult(requestPermissionResult);
@@ -71,7 +71,6 @@ public class PFragment extends Fragment {
         }
         //请求未通过的权限
         checkPermissions = new String[preUnPassList.size()];
-//        requestPermissions(checkPermissions, 0);
         preUnPassList.toArray(checkPermissions);
         requestPermissions(checkPermissions, PERMISSION_REQUEST_CODE);
         return null;
@@ -80,16 +79,15 @@ public class PFragment extends Fragment {
     /**
      * 请求权限前进行筛选，区分通过或没有通过的权限
      *
-     * @param permissions
-     * @return
+     * @param permissions 请求的所有权限
      */
     private void divisivePermissions(String[] permissions) {
-        Activity activity = getActivity();
-        if (activity == null) {
+        Context context = getContext();
+        if (context == null) {
             return;
         }
         for (String permission : permissions) {
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(getContext(), permission)) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context, permission)) {
                 //权限不通过
                 preUnPassList.add(permission);
             } else {
@@ -101,7 +99,6 @@ public class PFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
-//        if (requestCode == 0) {
             RequestPermissionResult requestPermissionResult = getRequestPermissionResult(permissions, grantResults);
             p.removeFragment();
             p.onRequestPermissionResult(requestPermissionResult);
@@ -148,7 +145,6 @@ public class PFragment extends Fragment {
                 state = RequestPermissionResult.NO_PERMISSION_PASS;
             }
         }
-
         return new RequestPermissionResult(state, deniedPermissions, passPermissions);
     }
 
