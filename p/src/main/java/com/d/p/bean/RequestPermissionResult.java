@@ -1,8 +1,11 @@
 package com.d.p.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Arrays;
 
-public class RequestPermissionResult {
+public class RequestPermissionResult implements Parcelable {
     /**
      * {@link RequestPermissionResult#ALL_PERMISSION_PASS}、
      * {@link RequestPermissionResult#SOME_PERMISSION_PASS}、
@@ -65,4 +68,34 @@ public class RequestPermissionResult {
                 ", passPermissions=" + Arrays.toString(passPermissions) +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.state);
+        dest.writeStringArray(this.deniedPermissions);
+        dest.writeStringArray(this.passPermissions);
+    }
+
+    protected RequestPermissionResult(Parcel in) {
+        this.state = in.readInt();
+        this.deniedPermissions = in.createStringArray();
+        this.passPermissions = in.createStringArray();
+    }
+
+    public static final Parcelable.Creator<RequestPermissionResult> CREATOR = new Parcelable.Creator<RequestPermissionResult>() {
+        @Override
+        public RequestPermissionResult createFromParcel(Parcel source) {
+            return new RequestPermissionResult(source);
+        }
+
+        @Override
+        public RequestPermissionResult[] newArray(int size) {
+            return new RequestPermissionResult[size];
+        }
+    };
 }

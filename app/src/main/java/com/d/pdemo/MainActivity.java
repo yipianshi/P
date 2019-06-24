@@ -1,11 +1,11 @@
 package com.d.pdemo;
 
 import android.Manifest;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.d.p.P;
 import com.d.p.bean.RequestPermissionResult;
@@ -13,14 +13,13 @@ import com.d.p.utils.L;
 
 import java.util.Arrays;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, P.OnRequestPermissionCallback {
 
     private Button button1;
     private Button button2;
     private Button button3;
     private P p1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .show();
                 break;
             case R.id.request_2_btn:
+                if (p1!=null)
                 p1.replacePermissionsAndShow(new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.RECORD_AUDIO});
