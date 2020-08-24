@@ -45,7 +45,7 @@ public class P implements Parcelable {
             return;
         }
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        pFragment = PFragment.newInstance(this, builder.requestPermissions);
+        pFragment = PFragment.newInstance(this, builder.requestPermissions, builder.tips);
         fragmentTransaction.add(pFragment, "PFragment");
         fragmentTransaction.commitAllowingStateLoss();
     }
@@ -122,6 +122,7 @@ public class P implements Parcelable {
         WeakReference<Object> weakReference;
         String[] requestPermissions;
         OnRequestPermissionCallback onRequestPermissionCallback;
+        String tips;
 
         /**
          * @param object 需要{@link FragmentActivity} 或者 {@link Fragment}
@@ -138,6 +139,29 @@ public class P implements Parcelable {
          */
         public Builder requestPermissions(String[] requestPermissions) {
             this.requestPermissions = requestPermissions;
+            return this;
+        }
+
+        /**
+         * 需要检测的权限组，当至少有一个权限没有通过时都会想系统申请权限
+         *
+         * @param requestPermissions
+         * @param tips               设置提示，如果设置了提示，则先展示提示内容才会申请权限
+         * @return
+         */
+        public Builder requestPermissions(String[] requestPermissions, String tips) {
+            this.requestPermissions = requestPermissions;
+            this.tips = tips;
+            return this;
+        }
+
+        /**
+         * 设置提示，如果设置了提示，则先展示提示内容才会申请权限
+         *
+         * @param tips
+         */
+        public Builder setTips(String tips) {
+            this.tips = tips;
             return this;
         }
 

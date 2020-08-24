@@ -2,8 +2,10 @@ package com.d.p;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +28,7 @@ public class PFragment extends Fragment {
 
     private final static String PARAMS1 = "params1";
     private final static String PARAMS2 = "params2";
+    private final static String PARAMS3 = "params3";
     private final static int PERMISSION_REQUEST_CODE = 0xFF;
 
     private ArrayList<String> preUnPassList = new ArrayList<>();
@@ -33,12 +37,18 @@ public class PFragment extends Fragment {
 
     private String[] permissions;
     private P p;
+    private String tips;
 
     public static PFragment newInstance(P p, String[] permissions) {
+        return newInstance(p, permissions, null);
+    }
+
+    public static PFragment newInstance(P p, String[] permissions, String tips) {
         Bundle args = new Bundle();
 //        args.putSerializable(PARAMS1, p);
         args.putParcelable(PARAMS1, p);
         args.putStringArray(PARAMS2, permissions);
+        args.putString(PARAMS3, tips);
         PFragment fragment = new PFragment();
         fragment.setArguments(args);
         return fragment;
@@ -55,26 +65,51 @@ public class PFragment extends Fragment {
 //            p = (P) args.getSerializable(PARAMS1);
             p = (P) args.getParcelable(PARAMS1);
             permissions = args.getStringArray(PARAMS2);
+            tips = args.getString(PARAMS3);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (!TextUtils.isEmpty(tips)) {
+            //展示对话框
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                    .setMessage(tips)
+                    .setTitle("权限申请说明")
+                    .setPositiveButton("了解", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .setOnDismissListener(dismissListener)
+                    .show();
+        } else {
+            doRequestPermission();
+        }
+        return null;
+    }
+
+    private void doRequestPermission() {
         divisivePermissions(permissions);
         if (preUnPassList.size() == 0) {
             //全部通过
             RequestPermissionResult requestPermissionResult = new RequestPermissionResult(RequestPermissionResult.ALL_PERMISSION_PASS, new String[]{}, permissions);
             p.onRequestPermissionResult(requestPermissionResult);
-            //不用再次请求权限
-            return null;
+        } else {
+            //请求未通过的权限
+            checkPermissions = new String[preUnPassList.size()];
+            preUnPassList.toArray(checkPermissions);
+            requestPermissions(checkPermissions, PERMISSION_REQUEST_CODE);
         }
-        //请求未通过的权限
-        checkPermissions = new String[preUnPassList.size()];
-        preUnPassList.toArray(checkPermissions);
-        requestPermissions(checkPermissions, PERMISSION_REQUEST_CODE);
-        return null;
     }
+
+    private DialogInterface.OnDismissListener dismissListener = new DialogInterface.OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            doRequestPermission();
+        }
+    };
 
     /**
      * 请求权限前进行筛选，区分通过或没有通过的权限
