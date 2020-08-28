@@ -29,6 +29,7 @@ Step 2.在使用的module的build.gradle下添加:
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.READ_PHONE_STATE})
 		//权限申请结果回调
+		        .setTips("权限申请前显示的内容")
                 .onRequestPermissionCallback(new P.OnRequestPermissionCallback() {
                     @Override
                     public void onRequestPermissionResult(RequestPermissionResult result) {
